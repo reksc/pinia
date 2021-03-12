@@ -18,6 +18,7 @@ import {
   StoreWithActions,
   Method,
   StateDescriptor,
+  StoreDefinition,
 } from './types'
 import { useStoreDevtools } from './devtools'
 import {
@@ -256,10 +257,10 @@ export function defineStore<
   getters?: G & ThisType<S & StoreWithGetters<G>>
   // allow actions use other actions
   actions?: A & ThisType<A & S & StoreWithState<Id, S> & StoreWithGetters<G>>
-}) {
+}): StoreDefinition<Id, S, G, A> {
   const { id, state, getters, actions } = options
 
-  return function useStore(pinia?: Pinia | null): Store<Id, S, G, A> {
+  function useStore(pinia?: Pinia | null): Store<Id, S, G, A> {
     // const vm = getCurrentInstance()
     // pinia = pinia || (vm && ((vm as any).$pinia as Pinia))
     pinia = pinia || (getCurrentInstance() && inject(piniaSymbol))
@@ -304,4 +305,8 @@ export function defineStore<
       actions as Record<string, Method> | undefined
     )
   }
+
+  useStore.$id = id
+
+  return useStore
 }

@@ -14,4 +14,5 @@ export {
   StoreWithActions,
   StoreWithState,
 } from './types'
+export { mapStores } from './mapHelpers'
 export { createStore } from './deprecated'
